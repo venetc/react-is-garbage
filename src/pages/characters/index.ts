@@ -1,0 +1,1 @@
+export { charactersPageRoute } from './lib';

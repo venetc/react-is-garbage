@@ -1,0 +1,1 @@
+export { locationsPageRoute } from './lib';
