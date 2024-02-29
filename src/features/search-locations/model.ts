@@ -1,6 +1,8 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useCallback, useReducer } from 'react';
 
 import type { Dispatch } from 'react';
+
+import { LocalStorage } from '@/shared/lib/LocalStorage';
 
 export const searchLocationsState = {
   name: '',
@@ -9,6 +11,8 @@ export const searchLocationsState = {
 };
 
 export type SearchLocationsState = typeof searchLocationsState;
+
+const getInitialState = (initialState: SearchLocationsState) => LocalStorage.get<SearchLocationsState>('locations') ?? initialState;
 
 export type SearchLocationsActions =
   | { type: 'set-name'; value: string }
@@ -30,4 +34,39 @@ export function locationsQueryReducer(state: SearchLocationsState, action: Searc
   }
 }
 
-export const useLocationsQuery = () => useReducer(locationsQueryReducer, searchLocationsState);
+export function useLocationsQuery() {
+  const [state, dispatch] = useReducer(locationsQueryReducer, searchLocationsState, getInitialState);
+
+  const setLocationName = useCallback((value: string) => {
+    dispatch({ type: 'set-name', value });
+  }, [dispatch]);
+  const clearLocationName = useCallback(() => {
+    dispatch({ type: 'set-name', value: '' });
+  }, [dispatch]);
+
+  const setLocationType = useCallback((value: string) => {
+    dispatch({ type: 'set-type', value });
+  }, [dispatch]);
+  const clearLocationType = useCallback(() => {
+    dispatch({ type: 'set-type', value: '' });
+  }, [dispatch]);
+
+  const setLocationDimension = useCallback((value: string) => {
+    dispatch({ type: 'set-dimension', value });
+  }, [dispatch]);
+  const clearLocationDimension = useCallback(() => {
+    dispatch({ type: 'set-dimension', value: '' });
+  }, [dispatch]);
+
+  return {
+    state,
+    setLocationName,
+    clearLocationName,
+    setLocationType,
+    clearLocationType,
+    setLocationDimension,
+    clearLocationDimension,
+  };
+}
+
+export type LocationsQueryAdapter = ReturnType<typeof useLocationsQuery>;

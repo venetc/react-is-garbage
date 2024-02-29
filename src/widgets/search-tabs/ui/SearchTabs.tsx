@@ -1,13 +1,13 @@
 import { type SearchTabsProps, tabs } from '../model';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
-import { SearchCharactersContext, SearchCharactersFieldset } from '@/features/search-characters';
-import { SearchEpisodesContext, SearchEpisodesFieldset } from '@/features/search-episodes';
-import { SearchLocationsContext, SearchLocationsFieldset } from '@/features/search-locations';
+import { SearchCharactersFieldset } from '@/features/search-characters';
+import { SearchEpisodesFieldset } from '@/features/search-episodes';
+import { SearchLocationsFieldset } from '@/features/search-locations';
 
-export function SearchTabs(props: SearchTabsProps) {
-  const { characters, locations, episodes, onTabChange } = props;
+export const SearchTabs = memo((props: SearchTabsProps) => {
+  const { onTabChange, charactersQuery } = props;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const activeTab = tabs[activeTabIndex];
@@ -18,30 +18,42 @@ export function SearchTabs(props: SearchTabsProps) {
   };
 
   return (
-    <SearchCharactersContext.Provider value={characters}>
-      <SearchLocationsContext.Provider value={locations}>
-        <SearchEpisodesContext.Provider value={episodes}>
-          <div className="flex justify-between">
-            { tabs.map((label, index) => (
-              <TabLabel
-                key={label}
-                label={label}
-                index={index}
-                activeTabIndex={activeTabIndex}
-                changeTab={changeTab}
-              />
-            ))}
-          </div>
+    <>
+      <div className="flex justify-between">
+        { tabs.map((label, index) => (
+          <TabLabel
+            key={label}
+            label={label}
+            index={index}
+            activeTabIndex={activeTabIndex}
+            changeTab={changeTab}
+          />
+        ))}
+      </div>
 
-          {activeTab === 'Characters' && <SearchCharactersFieldset />}
-          {activeTab === 'Locations' && <SearchLocationsFieldset />}
-          {activeTab === 'Episodes' && <SearchEpisodesFieldset />}
+      {activeTab === 'Characters' && (
+        <SearchCharactersFieldset
+          state={charactersQuery.state}
+          setCharacterName={charactersQuery.setCharacterName}
+          clearCharacterName={charactersQuery.clearCharacterName}
+          setCharacterSpecies={charactersQuery.setCharacterSpecies}
+          clearCharacterSpecies={charactersQuery.clearCharacterSpecies}
+          setCharacterStatus={charactersQuery.setCharacterStatus}
+          clearCharacterStatus={charactersQuery.clearCharacterStatus}
+          setCharacterType={charactersQuery.setCharacterType}
+          clearCharacterType={charactersQuery.clearCharacterType}
+          setCharacterGender={charactersQuery.setCharacterGender}
+          clearCharacterGender={charactersQuery.clearCharacterGender}
+        />
+      )}
+      {activeTab === 'Locations' && <SearchLocationsFieldset />}
+      {activeTab === 'Episodes' && <SearchEpisodesFieldset />}
+    </>
 
-        </SearchEpisodesContext.Provider>
-      </SearchLocationsContext.Provider>
-    </SearchCharactersContext.Provider>
   );
-}
+});
+
+SearchTabs.displayName = 'SearchTabs';
 
 interface TabLabelProps {
   label: string;
@@ -51,6 +63,7 @@ interface TabLabelProps {
 }
 function TabLabel(props: TabLabelProps) {
   const { label, index, activeTabIndex, changeTab } = props;
+
   return (
     <div
       key={label}

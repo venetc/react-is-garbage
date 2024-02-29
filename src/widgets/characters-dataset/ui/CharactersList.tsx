@@ -1,14 +1,14 @@
-import type { Dispatch } from 'react';
-import type { SearchCharactersActions } from '@/features/search-characters';
-
 import { type Character, CharacterRow } from '@/entities/character';
 
 interface CharactersListProps extends React.HTMLAttributes<HTMLUListElement> {
   characters: Character[];
-  charactersQueryDispatch: Dispatch<SearchCharactersActions>;
+  onSpeciesClick: (value: string) => void;
+  onTypeClick: (value: string) => void;
+  onStatusClick: (value: string) => void;
+  onGenderClick: (value: string) => void;
 }
 export function CharactersList(props: CharactersListProps) {
-  const { characters, className, charactersQueryDispatch, ...rest } = props;
+  const { characters, className, onSpeciesClick, onTypeClick, onStatusClick, onGenderClick, ...rest } = props;
 
   return (
     <ul className={`space-y-3 ${className ?? ''}`} {...rest}>
@@ -16,10 +16,10 @@ export function CharactersList(props: CharactersListProps) {
         <CharacterRow
           key={character.id}
           character={character}
-          onSpeciesClick={value => charactersQueryDispatch({ type: 'set-species', value })}
-          onTypeClick={value => charactersQueryDispatch({ type: 'set-type', value })}
-          onStatusClick={value => charactersQueryDispatch({ type: 'set-status', value })}
-          onGenderClick={value => charactersQueryDispatch({ type: 'set-gender', value })}
+          onSpeciesClick={onSpeciesClick}
+          onTypeClick={onTypeClick}
+          onStatusClick={onStatusClick}
+          onGenderClick={onGenderClick}
         />
       ))}
     </ul>

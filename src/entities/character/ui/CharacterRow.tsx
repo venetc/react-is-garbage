@@ -17,7 +17,7 @@ interface CharacterRowProps extends HTMLAttributes<HTMLLIElement> {
   onGenderClick: (gender: Character['gender']) => void;
 }
 
-function CharacterRowComponent(props: CharacterRowProps) {
+export const CharacterRow = memo((props: CharacterRowProps) => {
   const { character, onSpeciesClick, onTypeClick, onStatusClick, onGenderClick, ...rest } = props;
   return (
     <li
@@ -106,8 +106,7 @@ function CharacterRowComponent(props: CharacterRowProps) {
       </div>
     </li>
   );
-}
+});
 
-const CharacterRow = memo(CharacterRowComponent);
-
-export { CharacterRow };
+CharacterRow.displayName = 'CharacterRow';
+CharacterRow.whyDidYouRender = false;

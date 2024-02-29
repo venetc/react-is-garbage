@@ -1,50 +1,78 @@
-import { SearchCharactersContext } from '../model';
+import { memo } from 'react';
 
-import { useContext } from 'react';
+import type { CharactersQueryAdapter } from '../model';
+import type { ChangeEvent } from 'react';
 
 import { TextInputComponent } from '@/shared/ui/TextInputComponent';
 import { DropdownComponent } from '@/shared/ui/DropdownComponents';
 
-export function SearchCharactersFieldset() {
-  const [state, dispatch] = useContext(SearchCharactersContext);
+export const SearchCharactersFieldset = memo(({
+  state,
+  clearCharacterGender,
+  clearCharacterName,
+  clearCharacterSpecies,
+  clearCharacterStatus,
+  clearCharacterType,
+  setCharacterGender,
+  setCharacterName,
+  setCharacterSpecies,
+  setCharacterStatus,
+  setCharacterType,
+}: CharactersQueryAdapter) => {
+  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => setCharacterName(e.target.value);
+  const onNameClear = () => clearCharacterName();
+
+  const onSpeciesChange = (e: ChangeEvent<HTMLInputElement>) => setCharacterSpecies(e.target.value);
+  const onSpeciesClear = () => clearCharacterSpecies();
+
+  const onTypeChange = (e: ChangeEvent<HTMLInputElement>) => setCharacterType(e.target.value);
+  const onTypeClear = () => clearCharacterType();
+
+  const onStatusChange = (e: ChangeEvent<HTMLSelectElement>) => setCharacterStatus(e.target.value);
+  const onStatusClear = () => clearCharacterStatus();
+
+  const onGenderChange = (e: ChangeEvent<HTMLSelectElement>) => setCharacterGender(e.target.value);
+  const onGenderClear = () => clearCharacterGender();
 
   return (
     <div className="px-3 pb-4 pt-4 space-y-4">
       <TextInputComponent
         label="Name"
         placeholder="Rick"
-        onChange={e => dispatch({ type: 'set-name', value: e.target.value })}
-        onClear={() => dispatch({ type: 'set-name', value: '' })}
+        onChange={onNameChange}
+        onClear={onNameClear}
         value={state.name}
       />
       <TextInputComponent
         label="Species"
         placeholder="Human"
-        onChange={e => dispatch({ type: 'set-species', value: e.target.value })}
-        onClear={() => dispatch({ type: 'set-species', value: '' })}
+        onChange={onSpeciesChange}
+        onClear={onSpeciesClear}
         value={state.species}
       />
       <TextInputComponent
         label="Type"
         placeholder="Clone"
-        onChange={e => dispatch({ type: 'set-type', value: e.target.value })}
-        onClear={() => dispatch({ type: 'set-type', value: '' })}
+        onChange={onTypeChange}
+        onClear={onTypeClear}
         value={state.type}
       />
       <DropdownComponent
         label="Status"
         options={['Alive', 'Dead', 'Unknown']}
-        onChange={e => dispatch({ type: 'set-status', value: e.target.value })}
-        onClear={() => dispatch({ type: 'set-status', value: '' })}
+        onChange={onStatusChange}
+        onClear={onStatusClear}
         value={state.status}
       />
       <DropdownComponent
         label="Gender"
         options={['Female', 'Male', 'Genderless', 'Unknown']}
-        onChange={e => dispatch({ type: 'set-gender', value: e.target.value })}
-        onClear={() => dispatch({ type: 'set-gender', value: '' })}
+        onChange={onGenderChange}
+        onClear={onGenderClear}
         value={state.gender}
       />
     </div>
   );
-}
+});
+
+SearchCharactersFieldset.displayName = 'SearchCharactersFieldset';

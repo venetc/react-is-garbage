@@ -10,5 +10,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
-  plugins: [react()],
+  plugins: [react({
+    jsxImportSource: '@welldone-software/why-did-you-render',
+  })],
 });

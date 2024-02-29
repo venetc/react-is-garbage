@@ -1,3 +1,4 @@
+import './wdyr';
 import { AppWithRouter } from './providers';
 
 import { StrictMode } from 'react';

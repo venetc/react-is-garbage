@@ -1,0 +1,1 @@
+export { fetchCharacters } from './fetchCharacters';
