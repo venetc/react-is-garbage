@@ -1,1 +1,1 @@
-export { fetchCharacters } from './fetchCharacters';
+export { searchCharacters } from './searchCharacters';

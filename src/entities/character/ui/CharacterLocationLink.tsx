@@ -1,8 +1,10 @@
 import { Link } from '@tanstack/react-router';
 
-import type { HTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 
-interface CharacterLocationLinkProps extends HTMLAttributes<HTMLDivElement> {
+import { getLinkId } from '@/shared/lib/getLinkId';
+
+interface CharacterLocationLinkProps extends ComponentProps<'div'> {
   label: string;
   name: string;
   locationUrl: string;
@@ -11,16 +13,16 @@ interface CharacterLocationLinkProps extends HTMLAttributes<HTMLDivElement> {
 export function CharacterLocationLink(props: CharacterLocationLinkProps) {
   const { label, name, locationUrl, className, ...rest } = props;
 
-  const locationId = getLocationId(locationUrl);
+  const id = getLinkId(locationUrl);
 
   return (
     <div className={`relative flex gap-1 ${className ?? ''}`} {...rest}>
       <span className="font-fira_code font-bold">
         {label}
       </span>
-      {locationId
+      {id
         ? (
-          <Link to="/locations/$locationId" params={{ locationId }} className="cursor-pointer group">
+          <Link to="/locations/$id" params={{ id }} className="cursor-pointer group">
             <span className="capitalize align-middle text-navy-500">{name}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +34,7 @@ export function CharacterLocationLink(props: CharacterLocationLinkProps) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="inline w-auto align-middle h-[1em] ml-1 group-hover:text-navy-500/75 text-transparent transition-colors"
+              className="inline w-auto align-middle h-[1em] ml-1 group-hover:text-navy-500/75 text-transparent transition-colors max-sm:text-navy-500/75"
             >
               <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
               <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
@@ -42,12 +44,4 @@ export function CharacterLocationLink(props: CharacterLocationLinkProps) {
         : <span className="capitalize align-baseline text-navy-900">{name}</span>}
     </div>
   );
-}
-
-function getLocationId(locationUrl: string) {
-  const locationId = locationUrl.split('/').pop();
-
-  if (!locationId || Number.isNaN(+locationId)) return;
-
-  return locationId;
 }

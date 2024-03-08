@@ -1,12 +1,17 @@
-import type { HTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 import type { Character } from '../model';
 
 import { useImage } from '@/shared/lib/useImage';
 
-interface CharacterImageProps extends HTMLAttributes<HTMLDivElement> { image: Character['image']; name: Character['name'] }
+interface CharacterImageProps extends ComponentProps<'div'> {
+  image: Character['image'];
+  name: Character['name'];
+  width?: number;
+  height?: number;
+}
 
 export function CharacterImage(props: CharacterImageProps) {
-  const { image, name, className, ...rest } = props;
+  const { image, name, className, width = 80, height = 80, ...rest } = props;
 
   const { url, status } = useImage(image);
 
@@ -20,8 +25,8 @@ export function CharacterImage(props: CharacterImageProps) {
           src={url}
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
-          width={80}
-          height={80}
+          width={width}
+          height={height}
           alt={name}
           className="rounded-md h-full w-full object-cover"
         />

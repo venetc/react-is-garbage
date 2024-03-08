@@ -7,7 +7,7 @@ import { SearchEpisodesFieldset } from '@/features/search-episodes';
 import { SearchLocationsFieldset } from '@/features/search-locations';
 
 export const SearchTabs = memo((props: SearchTabsProps) => {
-  const { onTabChange, charactersQuery } = props;
+  const { onTabChange } = props;
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const activeTab = tabs[activeTabIndex];
@@ -31,21 +31,7 @@ export const SearchTabs = memo((props: SearchTabsProps) => {
         ))}
       </div>
 
-      {activeTab === 'Characters' && (
-        <SearchCharactersFieldset
-          state={charactersQuery.state}
-          setCharacterName={charactersQuery.setCharacterName}
-          clearCharacterName={charactersQuery.clearCharacterName}
-          setCharacterSpecies={charactersQuery.setCharacterSpecies}
-          clearCharacterSpecies={charactersQuery.clearCharacterSpecies}
-          setCharacterStatus={charactersQuery.setCharacterStatus}
-          clearCharacterStatus={charactersQuery.clearCharacterStatus}
-          setCharacterType={charactersQuery.setCharacterType}
-          clearCharacterType={charactersQuery.clearCharacterType}
-          setCharacterGender={charactersQuery.setCharacterGender}
-          clearCharacterGender={charactersQuery.clearCharacterGender}
-        />
-      )}
+      {activeTab === 'Characters' && <SearchCharactersFieldset />}
       {activeTab === 'Locations' && <SearchLocationsFieldset />}
       {activeTab === 'Episodes' && <SearchEpisodesFieldset />}
     </>

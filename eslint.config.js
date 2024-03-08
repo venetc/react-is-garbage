@@ -10,6 +10,7 @@ export default antfu({
     'curly': ['off', 'multi', 'consistent'],
     'antfu/if-newline': 'off',
     'no-console': 'off',
+    'ts/consistent-type-definitions': 'off',
     'import/order': [
       'warn',
       {

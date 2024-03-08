@@ -1,2 +1,2 @@
 export type { Character } from './model';
-export { CharacterRow } from './ui';
+export { CharacterRow, CharacterImage } from './ui';

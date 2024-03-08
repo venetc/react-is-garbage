@@ -59,7 +59,7 @@ export const CharacterRow = memo((props: CharacterRowProps) => {
           </div>
 
           <div className="
-          basis-9/12 grid grid-cols-2 grid-rows-3 grid-flow-col gap-x-6 gap-y-0.5 text text-xs
+          basis-9/12 grid grid-cols-2 grid-rows-3 grid-flow-col gap-x-6 gap-y-0.5 text-xs
           max-xl:basis-8/12 max-xl:text-sm max-xl:gap-x-2 max-xl:gap-y-1
           max-sm:w-full max-sm:grid-cols-1
           "
@@ -80,6 +80,7 @@ export const CharacterRow = memo((props: CharacterRowProps) => {
               field={character.status}
               onFieldClick={onStatusClick}
               emitLowercase
+              spoiler
             />
             <CharacterLocationLink
               className="

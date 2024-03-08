@@ -1,1 +1,2 @@
-export * as episodeModel from './model';
+export type { Episode } from './model';
+export { EpisodeRow } from './ui';

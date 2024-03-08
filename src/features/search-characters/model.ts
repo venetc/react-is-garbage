@@ -1,11 +1,10 @@
-import { fetchCharacters } from './api';
+import { searchCharacters } from './api';
 
 import { createContext, useCallback, useEffect, useMemo, useReducer } from 'react';
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
 import { LocalStorage } from '@/shared/lib/LocalStorage';
 import { useDebounce } from '@/shared/lib/useDebounce';
-import sound from '@/shared/assets/audio.mp3';
 
 export const searchCharactersState = {
   name: '',
@@ -50,38 +49,38 @@ export function useCharactersQuery() {
 
   const setCharacterName = useCallback((value: string) => {
     dispatch({ type: 'set-name', value });
-  }, [dispatch]);
+  }, []);
   const clearCharacterName = useCallback(() => {
     dispatch({ type: 'set-name', value: '' });
-  }, [dispatch]);
+  }, []);
 
   const setCharacterSpecies = useCallback((value: string) => {
     dispatch({ type: 'set-species', value });
-  }, [dispatch]);
+  }, []);
   const clearCharacterSpecies = useCallback(() => {
     dispatch({ type: 'set-species', value: '' });
-  }, [dispatch]);
+  }, []);
 
   const setCharacterType = useCallback((value: string) => {
     dispatch({ type: 'set-type', value });
-  }, [dispatch]);
+  }, []);
   const clearCharacterType = useCallback(() => {
     dispatch({ type: 'set-type', value: '' });
-  }, [dispatch]);
+  }, []);
 
   const setCharacterStatus = useCallback((value: string) => {
     dispatch({ type: 'set-status', value });
-  }, [dispatch]);
+  }, []);
   const clearCharacterStatus = useCallback(() => {
     dispatch({ type: 'set-status', value: '' });
-  }, [dispatch]);
+  }, []);
 
   const setCharacterGender = useCallback((value: string) => {
     dispatch({ type: 'set-gender', value });
-  }, [dispatch]);
+  }, []);
   const clearCharacterGender = useCallback(() => {
     dispatch({ type: 'set-gender', value: '' });
-  }, [dispatch]);
+  }, []);
 
   return useMemo(() => ({
     state,
@@ -112,14 +111,20 @@ export function useCharactersQuery() {
 
 export type CharactersQueryAdapter = ReturnType<typeof useCharactersQuery>;
 
-const audio = new Audio(sound);
-
 export function useCharacters({ state, isActive }: { state: SearchCharactersState; isActive: boolean }) {
   const queryParams = useDebounce(state, 500);
 
+  const trimmed = useMemo(() => ({
+    name: queryParams.name.trim(),
+    species: queryParams.species.trim(),
+    type: queryParams.type.trim(),
+    status: queryParams.status.trim(),
+    gender: queryParams.gender.trim(),
+  }), [queryParams]);
+
   const { isFetching, data, error, fetchNextPage, status, isError, hasNextPage } = useInfiniteQuery({
-    queryKey: ['characters', queryParams],
-    queryFn: ({ pageParam }) => fetchCharacters({ ...queryParams, page: pageParam.toString() }),
+    queryKey: ['characters', trimmed],
+    queryFn: ({ pageParam }) => searchCharacters({ ...trimmed, page: pageParam.toString() }),
     initialPageParam: 1,
     staleTime: 1000 * 60 * 60 * 6,
     refetchOnWindowFocus: false,
@@ -141,14 +146,10 @@ export function useCharacters({ state, isActive }: { state: SearchCharactersStat
     LocalStorage.set('characters', queryParams);
   }, [queryParams]);
 
-  useEffect(() => {
-    if (isError) audio.paused && audio.play();
-  }, [isError]);
-
-  const charactersList = useMemo(() => {
+  const dataList = useMemo(() => {
     if (!data) return [];
     return data.pages.flatMap(page => page.results);
   }, [data]);
 
-  return { isFetching, fetchNextPage, error, charactersList, hasNextPage, status };
+  return { isFetching, fetchNextPage, error, dataList, hasNextPage, status, isError };
 }

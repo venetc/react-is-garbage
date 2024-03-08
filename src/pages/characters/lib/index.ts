@@ -4,6 +4,6 @@ import { HeadlessLayoutRoute } from '@/widgets/headless-layout';
 
 export const charactersPageRoute = createRoute({
   getParentRoute: () => HeadlessLayoutRoute,
-  path: '/characters/$characterId',
+  path: '/characters/$id',
   component: lazyRouteComponent(() => import('../ui/page')),
 });

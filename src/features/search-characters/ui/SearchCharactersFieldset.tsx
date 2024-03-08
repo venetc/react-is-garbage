@@ -1,75 +1,59 @@
-import { memo } from 'react';
+import { SearchCharactersContext } from '../model';
 
-import type { CharactersQueryAdapter } from '../model';
+import { memo, useContext } from 'react';
+
 import type { ChangeEvent } from 'react';
 
 import { TextInputComponent } from '@/shared/ui/TextInputComponent';
 import { DropdownComponent } from '@/shared/ui/DropdownComponents';
 
-export const SearchCharactersFieldset = memo(({
-  state,
-  clearCharacterGender,
-  clearCharacterName,
-  clearCharacterSpecies,
-  clearCharacterStatus,
-  clearCharacterType,
-  setCharacterGender,
-  setCharacterName,
-  setCharacterSpecies,
-  setCharacterStatus,
-  setCharacterType,
-}: CharactersQueryAdapter) => {
-  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => setCharacterName(e.target.value);
-  const onNameClear = () => clearCharacterName();
+export const SearchCharactersFieldset = memo(() => {
+  const ctx = useContext(SearchCharactersContext);
 
-  const onSpeciesChange = (e: ChangeEvent<HTMLInputElement>) => setCharacterSpecies(e.target.value);
-  const onSpeciesClear = () => clearCharacterSpecies();
+  if (!ctx) return null;
 
-  const onTypeChange = (e: ChangeEvent<HTMLInputElement>) => setCharacterType(e.target.value);
-  const onTypeClear = () => clearCharacterType();
-
-  const onStatusChange = (e: ChangeEvent<HTMLSelectElement>) => setCharacterStatus(e.target.value);
-  const onStatusClear = () => clearCharacterStatus();
-
-  const onGenderChange = (e: ChangeEvent<HTMLSelectElement>) => setCharacterGender(e.target.value);
-  const onGenderClear = () => clearCharacterGender();
+  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => ctx.setCharacterName(e.target.value);
+  const onSpeciesChange = (e: ChangeEvent<HTMLInputElement>) => ctx.setCharacterSpecies(e.target.value);
+  const onTypeChange = (e: ChangeEvent<HTMLInputElement>) => ctx.setCharacterType(e.target.value);
+  const onStatusChange = (e: ChangeEvent<HTMLSelectElement>) => ctx.setCharacterStatus(e.target.value);
+  const onGenderChange = (e: ChangeEvent<HTMLSelectElement>) => ctx.setCharacterGender(e.target.value);
 
   return (
-    <div className="px-3 pb-4 pt-4 space-y-4">
+    <div className="px-3 pb-4 pt-4 space-y-4 max-sm:p-2">
       <TextInputComponent
         label="Name"
         placeholder="Rick"
         onChange={onNameChange}
-        onClear={onNameClear}
-        value={state.name}
+        onClear={ctx.clearCharacterName}
+        value={ctx.state.name}
       />
       <TextInputComponent
         label="Species"
         placeholder="Human"
         onChange={onSpeciesChange}
-        onClear={onSpeciesClear}
-        value={state.species}
+        onClear={ctx.clearCharacterSpecies}
+        value={ctx.state.species}
       />
       <TextInputComponent
         label="Type"
         placeholder="Clone"
         onChange={onTypeChange}
-        onClear={onTypeClear}
-        value={state.type}
+        onClear={ctx.clearCharacterType}
+        value={ctx.state.type}
       />
       <DropdownComponent
         label="Status"
         options={['Alive', 'Dead', 'Unknown']}
         onChange={onStatusChange}
-        onClear={onStatusClear}
-        value={state.status}
+        onClear={ctx.clearCharacterStatus}
+        value={ctx.state.status}
       />
       <DropdownComponent
         label="Gender"
         options={['Female', 'Male', 'Genderless', 'Unknown']}
         onChange={onGenderChange}
-        onClear={onGenderClear}
-        value={state.gender}
+        onClear={ctx.clearCharacterGender}
+        value={ctx.state.gender}
       />
     </div>
   );
